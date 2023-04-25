@@ -1,5 +1,7 @@
 import { user } from "./createUser.js"
 
+// createUSer.js 구조분해 할당
+
 const creatUSerTemplate = (user)=>{
     const result = `
     <html>
@@ -15,6 +17,5 @@ const creatUSerTemplate = (user)=>{
     `
     return console.log(result)
 }
-
 
 creatUSerTemplate(user)
