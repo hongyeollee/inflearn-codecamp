@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const getUser = () => {
+          axios.get("http://localhost:3000/users").then((res) => {
+          console.log(res);
+          const result = res.data;
+          const menuWrapper = document.querySelector("#User_Data_Wrapper"); // 리스트를 담을 wrapper div 생성
+
+          menuWrapper.innerHTML='';
+
+          result.forEach((user) => {
+            const userDiv = document.createElement("div");
+            userDiv.innerHTML = `
+              <div class="User_Table_Item">
+                <div class="Item_Info">${user.email}</div>
+                <div class="Item_Info">${user.personal}</div>
+                <div class="Item_Info">${user.phone}</div>
+                <div class="Item_Info">${user.prefer}</div>
+              </div>
+            `;
+            menuWrapper.appendChild(userDiv);
+          });
+        });
+      };
+    </script>
+    <script src="./index.js"></script>
+    <script src="./user.js"></script>
+    <title>유저 리스트</title>
+  </head>
+  <body>
+    <div class="Container">
+      <div id="Wrapper">
+        <div
+          id="Navi_Wrapper"
+          style="width: 100%; display: flex; justify-content: space-between"
+        >
+          <a href="../login/index.html" class="Back_Button"> 🔙로그인 </a>
+          <a href="../menu/index.html" class="Back_Button"> 메뉴보기 </a>
+        </div>
+        <div id="Title_Wrapper">유저 리스트</div>
+        <div onclick="openMenu()" id="Open_Menu_Btn">유저 리스트 열기</div>
+        <div class="CloseBtnWrapper">
+          <span id="CloseBtn" onclick="closeMenu()">X</span>
+        </div>
+        <div id="Menu_Background">
+          <div class="User_Table_Item">
+            <div class="Item_Info" id="email">이메일</div>
+            <div class="Item_Info" id="personal">주민번호</div>
+            <div class="Item_Info" id="phone">전화번호</div>
+            <div class="Item_Info" id="prefer">좋아하는 사이트</div>
+          </div>
+          <div id="User_Data_Wrapper"/>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
