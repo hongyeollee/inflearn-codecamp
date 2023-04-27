@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const getCoffee=()=>{
+        //1.axios를 활용한 backend 자료 가져와서 반영하기
+        axios
+    .get("http://localhost:3000/starbucks")
+    .then((res) => {
+      console.log(res);
+      const result = res.data; // 백엔드에서 받아온 result
+      const menuWrapper = document.createElement("div"); // menu 리스트를 담을 wrapper div 생성
+      
+      // result 리스트를 반복문으로 돌면서 각각의 menu를 화면에 출력
+      result.forEach((menu) => {
+        const menuDiv = document.createElement("div");
+        menuDiv.innerText = `${menu.name} (${menu.kcal}kcal)`;
+        menuWrapper.appendChild(menuDiv);
+      });
+
+      const menuBackground = document.getElementById("Menu_Background"); // 메뉴 배경 이미지
+      menuBackground.appendChild(menuWrapper); // menu wrapper를 메뉴 배경 이미지에 추가
+      menuBackground.style.display = "flex"; // 메뉴 배경 이미지를 보이도록 display 속성 변경
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+    const openMenu = () => {
+        getCoffee();
+        document.getElementById("Menu_Background").style.display = "block";
+        document.getElementById("CloseBtn").style.display = "block";
+        document.getElementById("Open_Menu_Btn").style.display = "none";
+      };
+
+      const closeMenu = () => {
+        document.getElementById("Menu_Background").style.display = "none";
+        document.getElementById("CloseBtn").style.display = "none";
+        document.getElementById("Open_Menu_Btn").style.display = "block";
+      };
+      }
+    </script>
+    <script src="index.js"></script>
+    <script src="menu.js"></script>
+    <title>메뉴</title>
+  </head>
+  <body>
+    <div class="Container">
+      <div id="Wrapper">
+        <div
+          id="Navi_Wrapper"
+          style="width: 100%; display: flex; justify-content: space-between"
+        >
+          <a href="../login/index.html" class="Back_Button"> 🔙로그인 </a>
+          <a href="../user/index.html" class="Back_Button"> 유저정보🔜 </a>
+        </div>
+
+        <div id="Title_Wrapper">나만의 메뉴</div>
+        <div onclick="openMenu()" id="Open_Menu_Btn">메뉴 열기</div>
+        <div class="CloseBtnWrapper">
+          <span id="CloseBtn" onclick="closeMenu()">X</span>
+        </div>
+        <div id="Menu_Background"></div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
