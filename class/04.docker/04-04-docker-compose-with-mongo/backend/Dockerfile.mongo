@@ -1,0 +1,2 @@
+# mongo ver.5로 설치한다.
+FROM mongo:5

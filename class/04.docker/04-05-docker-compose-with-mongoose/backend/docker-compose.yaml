@@ -1,0 +1,28 @@
+version: "3.7"
+
+# 컴퓨터들
+
+# compose할 컴퓨터이름(변수처럼 자유롭게 짓는다):
+#   build:
+#     파일경로: .(.은 현재경로를 의미힌다.)
+#     파일명:
+
+services:
+  my-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+
+  my-database:
+    image: mongo:5
+    # ports:
+    #   - 27017:27017
+#네임리졸루션이라는 환경(docker안에서 docker들끼리 연결되어있기때문에 localhost:27017이 아닌
+#my-database(연결하고자 하는 dockerfile name)을 연결점으로 uri를 index.js에 작성해주어야 한다.
+
+# Dockerfile에 하나의 명령만 실행(ex-'FROM mongo:5'만 있는경우) build에 images로
+# 바로 Dockerfile을 생성(설치)하여 빌드할 수 있다.
+# 이런경우에는 localhost의 mongo compass에 접속될 수 없음
+# 하지만, 네임리졸루션으로 epxress에서는 접속 됨
