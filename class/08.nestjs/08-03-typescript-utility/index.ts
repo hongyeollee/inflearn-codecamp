@@ -33,10 +33,12 @@ type ggg = keyof Iprofile; // "name"|"age"|"school"|"hobby"
 let myprofile: ggg = "hobby";
 
 // type과 interface의 차이 => interface는 선언병합 가능
+// 위 interface Iprofile이 있을는데 안에 선언한 내용과 새로 선언한 interface가 병합되어집을 알 수 있다.
 interface Iprofile {
   candy: number; //선언병합으로 추가됨
 }
 //응용예제
 let profile: Partial<Iprofile> = {
   candy: 10,
+  //cmd+i 로 들어갈 수 있는 내용에 대해서 recommend 해줄떼 내용 확인 가능
 };
