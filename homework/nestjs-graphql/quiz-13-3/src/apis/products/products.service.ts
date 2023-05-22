@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Products } from './entities/product.entity';
+import { IProductServiceCreate } from './interfaces/products-service.interface';
 
 @Injectable()
 export class ProductsService {
@@ -31,7 +32,7 @@ export class ProductsService {
     return result;
   }
 
-  createStarbucks({ createStarbucksInput }): string {
+  createStarbucks({ createStarbucksInput }: IProductServiceCreate): string {
     console.log({ createStarbucksInput });
     return '등록에 성공하였습니다.';
   }
