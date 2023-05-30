@@ -9,7 +9,7 @@ type Board {
   contents: String!
 }
 
-type ProductCateogry {
+type ProductCategory {
   id: String!
   name: String!
 }
@@ -47,7 +47,7 @@ type Product {
   price: Int!
   isSoldout: Boolean!
   productSaleslocation: ProductSaleslocation!
-  productCategory: ProductCateogry!
+  productCategory: ProductCategory!
   user: User!
   prodctTags: [ProductTag!]!
 }

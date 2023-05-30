@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class ProductCateogry {
+export class ProductCategory {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
