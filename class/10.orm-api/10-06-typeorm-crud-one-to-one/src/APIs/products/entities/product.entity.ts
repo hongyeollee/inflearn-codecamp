@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ProductCateogry } from 'src/APIs/productsCategories/entities/productCategory.entity';
+import { ProductCategory } from 'src/APIs/productsCategories/entities/productCategory.entity';
 import { ProductSaleslocation } from 'src/APIs/productsSaleslocations/entities/productSaleslocation.entity';
 import { ProductTag } from 'src/APIs/productsTags/entities/productTag.entity';
 import { User } from 'src/APIs/users/entities/user.entity';
@@ -43,9 +43,9 @@ export class Product {
   @Field(() => ProductSaleslocation)
   productSaleslocation: ProductSaleslocation; // -> 이때 productSaleslocation 이라는 column을 사용할것이고, ProductSaleslocation(interface) type을 사용할거야 라는 의미
 
-  @ManyToOne(() => ProductCateogry)
-  @Field(() => ProductCateogry)
-  productCategory: ProductCateogry;
+  @ManyToOne(() => ProductCategory)
+  @Field(() => ProductCategory)
+  productCategory: ProductCategory;
 
   @ManyToOne(() => User)
   @Field(() => User)
