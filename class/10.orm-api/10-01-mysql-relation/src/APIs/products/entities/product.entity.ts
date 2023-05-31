@@ -42,5 +42,5 @@ export class Product {
 
   @JoinTable() //->JoinTable을 쓰면 자동으로 중간테이블이 만들어진다.
   @ManyToMany(() => ProductTag, (productTags) => productTags.products)
-  prodctTags: ProductTag[];
+  productTags: ProductTag[];
 }
