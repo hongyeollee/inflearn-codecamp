@@ -54,7 +54,7 @@ export class Product {
   @JoinTable() //->JoinTable을 쓰면 자동으로 중간테이블이 만들어진다.
   @ManyToMany(() => ProductTag, (productTags) => productTags.products)
   @Field(() => [ProductTag])
-  prodctTags: ProductTag[];
+  productTags: ProductTag[];
 
   // @CreateDateColumn()//데이터 등록시 등록 시간 자동으로 추가
   // createdAt: Date()

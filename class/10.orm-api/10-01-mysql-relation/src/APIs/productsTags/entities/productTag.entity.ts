@@ -9,7 +9,7 @@ export class ProductTag {
   @Column()
   name: string;
 
-  @ManyToMany(() => Product, (products) => products.prodctTags)
+  @ManyToMany(() => Product, (products) => products.productTags)
   products: Product[];
 }
 
