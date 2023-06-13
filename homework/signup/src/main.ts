@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExeptionFilter } from './commons/filters/http-exception.filter';
+import { HttpExeptionFilter } from './commons/filter/http-exception.filter';
 
 const port = 3000;
 
