@@ -1,7 +1,7 @@
 import { Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 
 @Catch(HttpException)
-export class HttpExeptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException) {
     const status = exception.getStatus();
     const message = exception.message;
