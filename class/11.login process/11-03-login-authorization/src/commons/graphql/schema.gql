@@ -36,8 +36,9 @@ type ProductTag {
 
 type User {
   id: String!
-  name: String!
   email: String!
+  name: String!
+  age: Int!
 }
 
 type Product {
@@ -53,16 +54,20 @@ type Product {
 }
 
 type Query {
+  fetchUser: String!
   fetchBoards: [Board!]
   fetchProducts: [Product!]!
   fetchProduct(producId: String!): Product!
 }
 
 type Mutation {
+  login(email: String!, password: String!): String!
+  createUser(email: String!, password: String!, name: String!, age: Int!): User!
   creatBoard(createBoardInput: CreateBoardInput!): String
   createProduct(createProductInput: CreateProductInput!): Product
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
+  createProductCategory(name: String!): ProductCategory
 }
 
 input CreateBoardInput {
@@ -75,10 +80,24 @@ input CreateProductInput {
   name: String!
   description: String!
   price: Int!
+  productSaleslocation: ProductSaleslocationInput!
+  productCategoryId: String!
+  productTags: [String!]!
+}
+
+input ProductSaleslocationInput {
+  address: String!
+  addressDetail: String!
+  lat: Float!
+  lng: Float!
+  meetingTime: DateTime!
 }
 
 input UpdateProductInput {
   name: String
   description: String
   price: Int
+  productSaleslocation: ProductSaleslocationInput
+  productCategoryId: String
+  productTags: [String!]
 }
