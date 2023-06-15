@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import {
   IAuthServiceGetAccessToken,
   IAuthServiceLogin,
+  IAuthServiceSetRefreshToken,
 } from './interfaces/auth-service.interface';
 import { JwtService } from '@nestjs/jwt';
 
@@ -13,7 +14,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService, //
   ) {}
-  async login({ email, password }: IAuthServiceLogin): Promise<string> {
+  async login({
+    email,
+    password,
+    context,
+  }: IAuthServiceLogin): Promise<string> {
     // 1. 이메일 일치하는 유저 DB에서 찾기
     const user = await this.usersService.findOneByEmail({ email });
 
@@ -27,8 +32,11 @@ export class AuthService {
     // 4. 비밀번호 비교시에 잘못된 비밀번호를 작성하게되면 에러 던지기
     if (!isAuth) throw new UnprocessableEntityException('틀린 암호입니다.');
 
-    // 5. 유저와 비밀번호의 매칭이 모두 성공했을때
+    // 5. refreshToken(=JWT 활용)을 만들어서 브라우저 쿠키에 보내기
+
+    // 6. 유저와 비밀번호의 매칭이 모두 성공했을때
     //     => accessToken(=JWT 활용)을 만들어서 브라우저에 전달하기
+    this.setRefreshToken({ user, context });
 
     return this.getAccessToken({ user });
   }
@@ -38,5 +46,23 @@ export class AuthService {
       { sub: user.id },
       { secret: '나의비밀번호', expiresIn: '1h' },
     );
+  }
+
+  setRefreshToken({ user, context }: IAuthServiceSetRefreshToken): void {
+    const refreshToken = this.jwtService.sign(
+      { sub: user.id },
+      { secret: '나의리프레시비밀번호', expiresIn: '2w' },
+    );
+    //개발환경 사용시
+
+    context.res.setHeader(
+      'set-Cookie',
+      `refreshToken=${refreshToken}; path=/;`,
+    );
+
+    // //배포환경 사용시
+    // context.res.setHeader(
+    //   'set-Cookie',`refreshToken=${refreshToken}; path=/; domain=.mybackendsite.com,SameStie=None;Secure; httpOnly`,);
+    //context.res.setHeader('Access-control-origin', 'https://myfrontsite.com');
   }
 }
