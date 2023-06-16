@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,7 +10,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import {
   IUserServiceDelete,
   IUserServiceFindOne,
-  IUserServiceUpdate,
+  IUserServiceUpdateUserPwd,
   IUsersServiceCreate,
   IUsersServiceFindOneByEmail,
 } from './interfaces/users-service.interface';
@@ -48,7 +49,7 @@ export class UsersService {
     });
   }
 
-  async delete({ email }: IUserServiceDelete): Promise<boolean> {
+  async deleteLoginUser({ email }: IUserServiceDelete): Promise<boolean> {
     const user = await this.findOneByEmail({ email });
     if (!user) throw new BadRequestException('등록되지 않은 이메일 입니다.');
 
@@ -56,32 +57,31 @@ export class UsersService {
     return result.affected ? true : false;
   }
 
-  async update({
-    name,
-    age,
-    email,
-    password,
-  }: IUserServiceUpdate): Promise<UpdateResult> {
-    const user = await this.findOneByEmail({ email });
-    if (!user) throw new BadRequestException('등록되지 않은 이메일 입니다.');
-
-    const result: UpdateResult = await this.UsersRepository.update(
-      { id: user.id },
-      { name, age, email, password },
-    );
-
-    if (result.affected === 0)
-      throw new BadRequestException('회원정보 수정 실패');
-    return result;
-  }
-
-  findAll(): Promise<User[]> {
-    return this.UsersRepository.find();
-  }
-
   findOne({ email }: IUserServiceFindOne): Promise<User> {
     return this.UsersRepository.findOne({
       where: { email },
     });
+  }
+
+  async updateUserPwd({
+    email,
+    password,
+  }: IUserServiceUpdateUserPwd): Promise<UpdateResult> {
+    const user = await this.findOneByEmail({ email });
+    if (!user)
+      throw new UnprocessableEntityException('등록되지 않은 이메일 입니다.');
+
+    // resolver에서 useGuard를 사용하여 accessToken을 발행하기 때문에 해당된 유저만 접근가능하여 bcrypt.compare는 필요하지 않음.
+    // const isAuth = await bcrypt.compare(password, user.password);
+    // if (!isAuth) throw new UnprocessableEntityException('틀린 암호입니다.');
+
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(process.env.SALT),
+    );
+    return await this.UsersRepository.update(
+      { email: user.email },
+      { password: hashedPassword },
+    );
   }
 }

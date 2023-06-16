@@ -13,13 +13,11 @@ export interface IUserServiceDelete {
   email: string;
 }
 
-export interface IUserServiceUpdate {
-  password: string;
-  email: string;
-  name: string;
-  age: number;
-}
-
 export interface IUserServiceFindOne {
   email: string;
+}
+
+export interface IUserServiceUpdateUserPwd {
+  email: string;
+  password: string;
 }

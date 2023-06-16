@@ -10,13 +10,12 @@ type User {
 }
 
 type Query {
-  fetchUser: String!
-  fetchUsers: [User!]
+  fetchLoginUser: String!
 }
 
 type Mutation {
   login(email: String!, password: String!): String!
   createUser(password: String!, email: String!, name: String!, age: Float!): User
   deleteUser(email: String!): Boolean!
-  updateUser(name: String!, age: Float!, email: String!, password: String!): User
+  updateUserPwd(email: String!, password: String!): String!
 }
