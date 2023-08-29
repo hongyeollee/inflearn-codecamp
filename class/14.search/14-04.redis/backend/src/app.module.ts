@@ -1,0 +1,47 @@
+import { CacheModule, Module } from '@nestjs/common';
+import { BoardsModule } from './APIs/boards/boardsModule';
+import { ProductsModule } from './APIs/products/products.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductsCategoriesModule } from './APIs/productsCategories/productsCategories.module';
+import { UsersModule } from './APIs/users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './APIs/auth/auth.module';
+import { PointsTransactionsModule } from './APIs/pointsTransactions/pointsTransactions.module';
+import { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
+
+@Module({
+  imports: [
+    AuthModule,
+    BoardsModule,
+    PointsTransactionsModule,
+    ProductsModule,
+    ProductsCategoriesModule,
+    UsersModule,
+    ConfigModule.forRoot(),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'src/commons/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }), //req는 기본적으로 들어오지만 res 작성해야만 들어옴
+    }),
+    TypeOrmModule.forRoot({
+      type: process.env.DB_TYPE as 'mysql',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      entities: [__dirname + '/APIs/**/*.entity.*'],
+      synchronize: true,
+      logging: true,
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://my-redis:6379', //docker
+      isGlobal: true, //전역설정
+    }),
+  ],
+})
+export class AppModule {}
